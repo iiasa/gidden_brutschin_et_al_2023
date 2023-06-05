@@ -5,15 +5,9 @@ This is the analysis repository for generating figures for Gidden & Brutshin et 
 # Data
 
 To run the analysis notebookes in this repository, you will need to download the
-following files from
-[https://data.ece.iiasa.ac.at/genie](https://data.ece.iiasa.ac.at/genie-internal):
-
-
-1. `gidden_brutshin_et_al_2023_data.csv` downloadable from the GENIE Scenario Explorer
-2. `gidden_brutshin_et_al_2023_meta.csv` downloadable from the GENIE Scenario Explorer
-
-For AR6 data, please download data and the associated meta file from: 
-[https://data.ene.iiasa.ac.at/ar6/]
+data file for the paper
+[](on Zenodo) and the data and the associated meta file from 
+[https://data.ene.iiasa.ac.at/ar6/](the AR6 explorer database)
 
 and place them in the `data` folder
 
