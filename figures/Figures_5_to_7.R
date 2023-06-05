@@ -5,14 +5,14 @@
 library(readxl)
 library(tidyverse)
 library(here)
-library(vroom)
+library(readxl)
 library(hrbrthemes)
 library(zoo)
 library(cowplot)
 
 
-genie_all<-vroom(here("data","gidden_brutshin_et_al_2023_data.csv")) 
-meta<-vroom(here("data","gidden_brutshin_et_al_2023_meta.csv")) 
+genie_all<-read_excel(here("data","gidden_brutshin_et_al_2023_data.xlsx"), sheet="data") 
+meta<-read_excel(here("data","gidden_brutshin_et_al_2023_meta.xlsx"), sheet="meta") 
 
 
 #restructure key data sets
