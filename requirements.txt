@@ -1,0 +1,6 @@
+pyam-iamc
+numpy
+pandas
+seaborn
+matplotlib
+pooch
