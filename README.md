@@ -1,19 +1,18 @@
 # Overview
 
-This is the analysis repository for generating figures for Gidden & Brutshin et al. (2023).
+This is the analysis repository for generating figures for [Gidden et al. (2023)](https://iopscience.iop.org/article/10.1088/1748-9326/acd8d5).
 
 # Data
 
-To run the analysis notebookes in this repository, you will need to download the
-following files from
-[https://data.ece.iiasa.ac.at/genie](https://data.ece.iiasa.ac.at/genie-internal):
+To run the analysis notebookes in this repository:
 
+1. download the data file for the paper, which can be done programatically with:
 
-1. `gidden_brutshin_et_al_2023_data.csv` downloadable from the GENIE Scenario Explorer
-2. `gidden_brutshin_et_al_2023_meta.csv` downloadable from the GENIE Scenario Explorer
+```
+pooch.retrieve("doi:10.5281/zenodo.7986556/gidden_brutschin_et_al_2023.xlsx", known_hash="md5:ee1c89ca2829380fca9fbda79423813d", fname="gidden_brutshin_et_al_2023_data.xlsx", path='./data')
+```
 
-For AR6 data, please download data and the associated meta file from: 
-[https://data.ene.iiasa.ac.at/ar6/]
+2. download data and the associated meta file from  [the AR6 explorer database](https://data.ene.iiasa.ac.at/ar6/)
 
 and place them in the `data` folder
 
