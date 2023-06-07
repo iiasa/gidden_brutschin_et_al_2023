@@ -7,7 +7,7 @@ This is the analysis repository for generating figures for [Gidden et al.
 
 To run the analysis notebookes in this repository:
 
-1. download the data file for the paper, which can be done programatically using
+1. download the [data file](https://zenodo.org/record/7986556) for the paper, which can be done programatically using
    [`pooch`](https://www.fatiando.org/pooch/latest/) with:
 
 ```python
