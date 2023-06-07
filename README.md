@@ -1,6 +1,6 @@
 # Overview
 
-This is the analysis repository for generating figures for Gidden & Brutshin et al. (2023).
+This is the analysis repository for generating figures for [Gidden et al. (2023)](https://iopscience.iop.org/article/10.1088/1748-9326/acd8d5).
 
 # Data
 
