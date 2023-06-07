@@ -4,9 +4,15 @@ This is the analysis repository for generating figures for Gidden & Brutshin et 
 
 # Data
 
-To run the analysis notebookes in this repository, you will need to download the
-data file for the paper
-[](on Zenodo) and the data and the associated meta file from 
+To run the analysis notebookes in this repository:
+
+1. download the data file for the paper, which can be done programatically with:
+
+```
+pooch.retrieve("doi:10.5281/zenodo.7986556/gidden_brutschin_et_al_2023.xlsx", known_hash="md5:ee1c89ca2829380fca9fbda79423813d", fname="gidden_brutshin_et_al_2023_data.xlsx", path='./data')
+```
+
+2. download data and the associated meta file from 
 [https://data.ene.iiasa.ac.at/ar6/](the AR6 explorer database)
 
 and place them in the `data` folder
