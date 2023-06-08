@@ -124,8 +124,7 @@ indicators=c(
 )  
 
 years<-c("2020", "2025","2030","2035","2040", "2045","2050", "2055","2060", "2070", "2080", "2090", "2100")
-
-
+region2<-c("Latin America and Caribbean", "China and Centrally Planned Asia","Developed Regions","Middle East and Africa","South and South East Asia")
 
 
 scenario_set<-genie_all %>%
@@ -201,7 +200,7 @@ ar6_set<-ar6 %>%
 ###############################
 
 biomass1<-scenario_final %>%
-  filter(Region=="World", Year<2055) %>%
+  filter(Region %in% region2, Year<2055) %>%
   filter(`Short Name` %in% scenarios_key) %>%
   select(Scenario_ID, scenario, temperature2, Year, primary_energy_biomass) %>%
   drop_na() %>%
@@ -293,38 +292,26 @@ ggsave("global.jpeg", units="in", width=12, height=14, dpi=300)
 #########################################
 
 solar_trajectory<-scenario_final %>%
-  filter(Region!="World", Year<2045) %>%
+  filter(Region %in% region2, Year<2045) %>%
   filter(`Short Name` %in% scenarios_key) %>%
-  mutate(region2=case_when(
-    Region=="LAM"~"Latin America and Caribbean",
-    Region=="CPA"~"China and Centrally Planned Asia",
-    Region=="NAM"~"Developed Regions",
-    Region=="WEU"~"Developed Regions",
-    Region=="EEU"~"Developed Regions",
-    Region=="FSU"~"Developed Regions",
-    Region=="PAO"~"Developed Regions",
-    Region=="AFR"~"Middle East and Africa",
-    Region=="MEA"~"Middle East and Africa",
-    Region=="PAS"~"South and South East Asia",
-    Region=="SAS"~"South and South East Asia")) %>%
   ungroup()%>%
-  group_by(region2, Scenario_ID, Year, temperature2, scenario) %>%
+  group_by(Region, Scenario_ID, Year, temperature2, scenario) %>%
   summarise(capacity_electricity_solar=sum(capacity_electricity_solar)) %>%
   ungroup() %>%
-  group_by(region2,Scenario_ID) %>%
+  group_by(Region,Scenario_ID) %>%
   mutate(growth=((capacity_electricity_solar/lag(capacity_electricity_solar))^(1/5)-1)*100) %>%
   filter(Year %in%c(2030,2035)) %>%
   mutate(Year=as.factor(Year))%>%  
-  filter(region2!="Latin America and Caribbean") %>%
+  filter(Region!="Latin America and Caribbean") %>%
   drop_na() %>%
   mutate(scenario=factor(scenario, levels=c("No DACCS/Immediate Global Action", "DACCS/Immediate Global Action", "No DACCS/Governance Constrained Action", "DACCS/Governance Constrained Action"))) %>%
-  mutate(region2=factor(region2, level=c("Developed Regions", "China and Centrally Planned Asia", "Latin America and Caribbean", "South and South East Asia","Middle East and Africa"))) %>%
+  mutate(Region=factor(Region, level=c("Developed Regions", "China and Centrally Planned Asia", "South and South East Asia","Middle East and Africa"))) %>%
   ggplot(aes(x=scenario, y=growth,fill=Year))+
   geom_col(position = "dodge", stat = "identity")+
   theme_bw()+
   #facet_wrap(~region2+temperature2, ncol = 3)+
   #facet_grid(region2~temperature2,scales = "free_x", space="free")+
-  facet_grid(region2~temperature2)+
+  facet_grid(Region~temperature2)+
   xlab("")+  
   ylab("Solar Capacity yearly growth rate")+
   scale_fill_manual(values = col_fill)+
@@ -344,35 +331,23 @@ ggsave("solar.jpeg", units="in", width=9, height=12, dpi=300)
 #########################################
 
 coal_trajectory<-scenario_final %>%
-  filter(Region!="World", Year<2045) %>%
+  filter(Region %in% region2, Year<2045) %>%
   filter(`Short Name` %in% scenarios_key) %>%
-  mutate(region2=case_when(
-    Region=="LAM"~"Latin America and Caribbean",
-    Region=="CPA"~"China and Centrally Planned Asia",
-    Region=="NAM"~"Developed Regions",
-    Region=="WEU"~"Developed Regions",
-    Region=="EEU"~"Developed Regions",
-    Region=="FSU"~"Developed Regions",
-    Region=="PAO"~"Developed Regions",
-    Region=="AFR"~"Middle East and Africa",
-    Region=="MEA"~"Middle East and Africa",
-    Region=="PAS"~"South and South East Asia",
-    Region=="SAS"~"South and South East Asia")) %>%
   ungroup()%>%
-  group_by(region2, Scenario_ID, Year, temperature2, scenario) %>%
+  group_by(Region, Scenario_ID, Year, temperature2, scenario) %>%
   summarise(secondary_energy_electricity_coal=sum(secondary_energy_electricity_coal),secondary_energy_electricity=sum(secondary_energy_electricity)) %>%
   ungroup() %>%
-  group_by(region2,Scenario_ID) %>%
+  group_by(Region,Scenario_ID) %>%
   mutate(coal_pp=100*(lag(secondary_energy_electricity_coal)/lag(secondary_energy_electricity)-secondary_energy_electricity_coal/secondary_energy_electricity)) %>%
   filter(Year %in%c(2025,2030)) %>%
   mutate(Year=as.factor(Year))%>%  
   drop_na() %>%
   mutate(scenario=factor(scenario, levels=c("No DACCS/Immediate Global Action", "DACCS/Immediate Global Action", "No DACCS/Governance Constrained Action", "DACCS/Governance Constrained Action"))) %>%
-  mutate(region2=factor(region2, level=c("Developed Regions", "China and Centrally Planned Asia", "Latin America and Caribbean", "South and South East Asia","Middle East and Africa"))) %>%
+  mutate(Region=factor(Region, level=c("Developed Regions", "China and Centrally Planned Asia", "Latin America and Caribbean", "South and South East Asia","Middle East and Africa"))) %>%
   ggplot(aes(x=scenario, y=coal_pp,fill=Year))+
   geom_col(position = "dodge", stat = "identity")+
   theme_bw()+
-  facet_grid(region2~temperature2)+
+  facet_grid(Region~temperature2)+
   xlab("")+
   ylab("Coal decline rate")+
   scale_fill_manual(values = col_fill2)+
@@ -390,35 +365,23 @@ ggsave("coal.jpeg", units="in", width=9, height=14, dpi=300)
 #########################################
 
 wind_trajectory<-scenario_final %>%
-  filter(Region!="World", Year<2045) %>%
+  filter(Region %in% region2, Year<2045) %>%
   filter(`Short Name` %in% scenarios_key) %>%
-  mutate(region2=case_when(
-    Region=="LAM"~"Latin America and Caribbean",
-    Region=="CPA"~"China and Centrally Planned Asia",
-    Region=="NAM"~"Developed Regions",
-    Region=="WEU"~"Developed Regions",
-    Region=="EEU"~"Developed Regions",
-    Region=="FSU"~"Developed Regions",
-    Region=="PAO"~"Developed Regions",
-    Region=="AFR"~"Middle East and Africa",
-    Region=="MEA"~"Middle East and Africa",
-    Region=="PAS"~"South and South East Asia",
-    Region=="SAS"~"South and South East Asia")) %>%
   ungroup()%>%
-  group_by(region2, Scenario_ID, Year, temperature2, scenario) %>%
+  group_by(Region, Scenario_ID, Year, temperature2, scenario) %>%
   summarise(capacity_electricity_wind=sum(capacity_electricity_wind)) %>%
   ungroup() %>%
-  group_by(region2,Scenario_ID) %>%
+  group_by(Region,Scenario_ID) %>%
   mutate(growth=((capacity_electricity_wind/lag(capacity_electricity_wind))^(1/5)-1)*100) %>%
   filter(Year %in%c(2030,2035)) %>%
   mutate(Year=as.factor(Year))%>%  
   drop_na() %>%
   mutate(scenario=factor(scenario, levels=c("No DACCS/Immediate Global Action", "DACCS/Immediate Global Action", "No DACCS/Governance Constrained Action", "DACCS/Governance Constrained Action"))) %>%
-  mutate(region2=factor(region2, level=c("Developed Regions", "China and Centrally Planned Asia", "Latin America and Caribbean", "South and South East Asia","Middle East and Africa"))) %>%
+  mutate(Region=factor(Region, level=c("Developed Regions", "China and Centrally Planned Asia", "Latin America and Caribbean", "South and South East Asia","Middle East and Africa"))) %>%
   ggplot(aes(x=scenario, y=growth,fill=Year))+
   geom_col(position = "dodge", stat = "identity")+
   theme_bw()+
-  facet_grid(region2~temperature2,scales = "free_x", space="free")+
+  facet_grid(Region~temperature2,scales = "free_x", space="free")+
   xlab("")+  
   ylab("Wind Capacity yearly growth rate")+
   scale_fill_manual(values = col_fill)+
