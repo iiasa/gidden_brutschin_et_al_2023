@@ -5,14 +5,19 @@
 library(readxl)
 library(tidyverse)
 library(here)
-library(readxl)
+library(vroom)
 library(hrbrthemes)
 library(zoo)
 library(cowplot)
+library(vroom)
 
+#Please set the filepath to your data file
 
-genie_all<-read_excel(here("data","gidden_brutshin_et_al_2023_data.xlsx"), sheet="data") 
-meta<-read_excel(here("data","gidden_brutshin_et_al_2023_meta.xlsx"), sheet="meta") 
+filepath<-"C:/Users/.../data/gidden_brutschin_et_al_2023.xlsx"
+
+genie_all<-read_xlsx(filepath, sheet="data") 
+meta<-read_xlsx(filepath, sheet="meta") %>%
+      rename(Scenario=scenario, Model=model)
 
 
 #restructure key data sets
@@ -124,7 +129,7 @@ indicators=c(
 )  
 
 years<-c("2020", "2025","2030","2035","2040", "2045","2050", "2055","2060", "2070", "2080", "2090", "2100")
-region2<-c("Latin America and Caribbean", "China and Centrally Planned Asia","Developed Regions","Middle East and Africa","South and South East Asia")
+region2<-c("Latin America", "China & Centrally Planned Asia","Developed Regions","Middle East & Africa","South & South East Asia")
 
 
 scenario_set<-genie_all %>%
@@ -173,7 +178,7 @@ col_fill2<-c("2025"="black","2030"="grey")
 #AR6 data preparation
 
 
-genie_all<-vroom(here("data","AR6_Scenarios_Database_World_v1.0.csv")) 
+ar6<-vroom(here("data","AR6_Scenarios_Database_World_v1.0.csv")) 
 meta2<-vroom(here("data","AR6_Scenarios_Database_metadata_indicators_v1.1.csv"))%>%
   select(Model, Scenario, Category)
 
@@ -200,7 +205,7 @@ ar6_set<-ar6 %>%
 ###############################
 
 biomass1<-scenario_final %>%
-  filter(Region %in% region2, Year<2055) %>%
+  filter(Region=="World", Year<2055) %>%
   filter(`Short Name` %in% scenarios_key) %>%
   select(Scenario_ID, scenario, temperature2, Year, primary_energy_biomass) %>%
   drop_na() %>%
@@ -302,10 +307,10 @@ solar_trajectory<-scenario_final %>%
   mutate(growth=((capacity_electricity_solar/lag(capacity_electricity_solar))^(1/5)-1)*100) %>%
   filter(Year %in%c(2030,2035)) %>%
   mutate(Year=as.factor(Year))%>%  
-  filter(Region!="Latin America and Caribbean") %>%
+  filter(Region!="Latin America") %>%
   drop_na() %>%
   mutate(scenario=factor(scenario, levels=c("No DACCS/Immediate Global Action", "DACCS/Immediate Global Action", "No DACCS/Governance Constrained Action", "DACCS/Governance Constrained Action"))) %>%
-  mutate(Region=factor(Region, level=c("Developed Regions", "China and Centrally Planned Asia", "South and South East Asia","Middle East and Africa"))) %>%
+  mutate(Region=factor(Region, level=c("Developed Regions", "China & Centrally Planned Asia", "Latin America", "South & South East Asia","Middle East & Africa"))) %>%
   ggplot(aes(x=scenario, y=growth,fill=Year))+
   geom_col(position = "dodge", stat = "identity")+
   theme_bw()+
@@ -343,7 +348,7 @@ coal_trajectory<-scenario_final %>%
   mutate(Year=as.factor(Year))%>%  
   drop_na() %>%
   mutate(scenario=factor(scenario, levels=c("No DACCS/Immediate Global Action", "DACCS/Immediate Global Action", "No DACCS/Governance Constrained Action", "DACCS/Governance Constrained Action"))) %>%
-  mutate(Region=factor(Region, level=c("Developed Regions", "China and Centrally Planned Asia", "Latin America and Caribbean", "South and South East Asia","Middle East and Africa"))) %>%
+  mutate(Region=factor(Region, level=c("Developed Regions", "China & Centrally Planned Asia", "Latin America", "South & South East Asia","Middle East & Africa"))) %>%
   ggplot(aes(x=scenario, y=coal_pp,fill=Year))+
   geom_col(position = "dodge", stat = "identity")+
   theme_bw()+
@@ -377,7 +382,7 @@ wind_trajectory<-scenario_final %>%
   mutate(Year=as.factor(Year))%>%  
   drop_na() %>%
   mutate(scenario=factor(scenario, levels=c("No DACCS/Immediate Global Action", "DACCS/Immediate Global Action", "No DACCS/Governance Constrained Action", "DACCS/Governance Constrained Action"))) %>%
-  mutate(Region=factor(Region, level=c("Developed Regions", "China and Centrally Planned Asia", "Latin America and Caribbean", "South and South East Asia","Middle East and Africa"))) %>%
+  mutate(Region=factor(Region, level=c("Developed Regions", "China & Centrally Planned Asia", "Latin America", "South & South East Asia","Middle East & Africa"))) %>%
   ggplot(aes(x=scenario, y=growth,fill=Year))+
   geom_col(position = "dodge", stat = "identity")+
   theme_bw()+
@@ -393,4 +398,3 @@ wind_trajectory<-scenario_final %>%
 
 wind_trajectory
 ggsave("wind.jpeg", units="in", width=9, height=14, dpi=300)
-
