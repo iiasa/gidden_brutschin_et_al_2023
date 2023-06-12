@@ -1,5 +1,7 @@
 # Overview
 
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.8026910.svg)](https://doi.org/10.5281/zenodo.8026910)
+
 This is the analysis repository for generating figures for [Gidden et al.
 (2023)](https://iopscience.iop.org/article/10.1088/1748-9326/acd8d5).
 
